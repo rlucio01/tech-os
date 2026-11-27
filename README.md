@@ -138,7 +138,7 @@ No chat do seu agente (Antigravity, Claude Code, Cursor), você aciona as skills
 | **0** | **`tos-manifesto`** | `.tech-os/00-manifesto.md`<br>`.tech-os/_dominio.md` | Define stack, segurança, DoD e vocabulário do projeto. Roda **1x por projeto**. |
 | **1** | **`tos-discovery`** | `01-discovery.md` | Entrevista você pergunta por pergunta para revelar **Unknown Knowns** e **Unknown Unknowns** antes de codar. |
 | **2** | **`tos-blueprint`** | `02-blueprint.md` | Formaliza o PRD técnico com User Stories, módulos afetados, testes e classificação de impacto (**`local`** vs **`estrutural`**). |
-| **2.5** | **`tos-design`** | `02-design.md` *(opcional)* | Define hierarquia visual, estados (`loading`, `empty`, `error`, `success`), responsividade e acessibilidade para UI. |
+| **2.5** | **`tos-design`** | `02-design.md` *(opcional)* | Define hierarquia visual, estados (`loading`, `empty`, `error`, `success`), responsividade e acessibilidade. Usa **shadcn/ui** como padrão se nenhum design system for especificado. |
 | **3** | **`tos-contratos`** | `03-contratos.md` *(opcional)* | Detalha rotas de API, schemas de dados, códigos de erro e regras de segurança. |
 | **4** | **`tos-planejar`** | `04-plano.md` | Quebra a entrega em fatias executáveis (`F01`, `F02`...) com dependências e marcação `[AUTO]` ou `[HUMANO]`. |
 | **5** | **`tos-security`** | *(auditoria)* | Audita segredos, validação de input, auth, PII em logs e dependências antes de fechar PR/feature. |
@@ -157,7 +157,7 @@ seu-projeto/
 └── .tech-os/
     ├── 00-manifesto.md         # Lei do projeto (stack, segurança, DoD)
     ├── _dominio.md             # Glossário de negócio
-    ├── _design.md              # Padrões visuais e de UI (opcional)
+    ├── _design.md              # Padrões visuais e de UI (padrão: shadcn/ui, opcional)
     └── 001-minha-feature/
         ├── 01-discovery.md     # Entendimento e decisões
         ├── 02-blueprint.md     # PRD de engenharia e impacto

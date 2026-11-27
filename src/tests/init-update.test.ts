@@ -23,9 +23,10 @@ describe('init & update', () => {
       const manifestoPath = path.join(tmpDir, '.tech-os', '00-manifesto.md');
       await fs.writeFile(manifestoPath, '# Custom Manifesto\n', 'utf-8');
 
-      // Check _design.md was created
+      // Check _design.md was created with shadcn/ui default
       const designContent = await fs.readFile(path.join(tmpDir, '.tech-os', '_design.md'), 'utf-8');
-      assert.match(designContent, /Stack de UI/);
+      assert.match(designContent, /shadcn\/ui/);
+      assert.match(agentsAfterInit, /shadcn\/ui/);
 
       // Run update
       await runUpdate(tmpDir);

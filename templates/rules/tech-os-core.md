@@ -15,6 +15,11 @@ Sempre que iniciar uma tarefa, consulte (se existirem):
 4. **Mudanças cirúrgicas.** Altere apenas o que tem relação direta com o pedido.
 5. **Regra de Ouro:** O desenvolvedor precisa conseguir explicar a mudança sem abrir o chat.
 
+## Padrão de Design (Fallback Inteligente)
+Se a tarefa envolver Frontend/UI e **nenhum Design System estiver especificado** (nem em `.tech-os/_design.md`, nem no pedido):
+- Para projetos novos ou stacks React/Next.js/Tailwind: adote o padrão **shadcn/ui** (`https://ui.shadcn.com/`) com **Tailwind CSS** e ícones **Lucide**, tratando os 4 estados (`loading`, `empty`, `error`, `success`).
+- Se o codebase já utilizar outra biblioteca de UI (ex.: Material UI, Bootstrap, Chakra, Vue/Angular), respeite o padrão já existente no projeto.
+
 ## Classificação de Impacto
 Antes de implementar qualquer mudança:
 - **`local`**: não altera API/schema nem cruza fronteiras arquiteturais.

@@ -10,7 +10,7 @@ Use esta skill para features com interface (Web, Mobile, Desktop) para evitar UI
 
 ## Pré-requisito
 - Leia `.tech-os/_design.md` (se existir) e `.tech-os/<NNN>-<slug>/02-blueprint.md`.
-- Se `.tech-os/_design.md` ainda não existir e o projeto tiver frontend, sugira criar um com paleta, tipografia e stack de UI.
+- **Padrão Fallback (`shadcn/ui`):** se `.tech-os/_design.md` não existir e o projeto não especificar outro Design System (e for projeto novo ou React/Next/Tailwind), adote **shadcn/ui** (https://ui.shadcn.com/) + **Tailwind CSS** + **Lucide** como padrão. Se o projeto já usar outra biblioteca de UI (ex.: MUI, Bootstrap, Vue), respeite a stack existente.
 
 ## O que definir antes de codar a UI
 1. **Objetivo da Tela / Fluxo**: qual é a ação principal do usuário?

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1] - 2026-11-27
+### Melhorado
+- **Padrão de Design (`shadcn/ui`):** Quando nenhum Design System é especificado em projetos com Frontend/UI (novos ou React/Next/Tailwind), `AGENTS.md`/`CLAUDE.md`/Cursor, `tos-design` e `_design.md` adotam automaticamente **shadcn/ui** (`https://ui.shadcn.com/`) + Tailwind CSS + Lucide, respeitando libs já existentes no codebase.
+
 ## [0.2.0] - 2026-11-27
 ### Adicionado
 - **Segurança:** `Secret Guard` integrado ao `tech-os run` (bloqueia commit de `.env`, chaves privadas e tokens) e ao `tech-os doctor`.
