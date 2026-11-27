@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech OS — Guia Completo da Metodologia</title>
+  <style>
+    :root {
+      --bg: #070d1a;
+      --surface: #0e182d;
+      --surface-2: #13223e;
+      --border: rgba(148, 163, 184, 0.18);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --violet: #a78bfa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #040812;
+      color: var(--text);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide {
+      width: 297mm;
+      height: 210mm;
+      margin: 0 auto 16px auto;
+      padding: 18mm 20mm 16mm 20mm;
+      background: radial-gradient(circle at 88% 20%, rgba(56, 189, 248, 0.12), transparent 42%),
+                  radial-gradient(circle at 12% 88%, rgba(52, 211, 153, 0.08), transparent 40%),
+                  var(--bg);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .slide:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    @media print {
+      body { background: var(--bg); }
+      .slide { margin: 0; border: none; }
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .eyebrow.emerald { color: var(--emerald); background: rgba(52, 211, 153, 0.12); border-color: rgba(52, 211, 153, 0.3); }
+    .eyebrow.amber { color: var(--amber); background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.3); }
+
+    h1 {
+      font-size: 52px;
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 32px;
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    .accent-cyan { color: var(--cyan); }
+    .accent-emerald { color: var(--emerald); }
+    .accent-amber { color: var(--amber); }
+    .accent-rose { color: var(--rose); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .card.highlight-cyan { border-top: 3px solid var(--cyan); }
+    .card.highlight-emerald { border-top: 3px solid var(--emerald); }
+    .card.highlight-amber { border-top: 3px solid var(--amber); }
+    .card.highlight-rose { border-top: 3px solid var(--rose); background: rgba(251, 113, 133, 0.06); }
+    .card.highlight-violet { border-top: 3px solid var(--violet); }
+
+    p, li {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    ul { padding-left: 18px; }
+    li { margin-bottom: 6px; }
+
+    code, pre {
+      font-family: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+    }
+
+    code {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 12.5px;
+    }
+
+    pre {
+      background: #040914;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #e2e8f0;
+      overflow: hidden;
+    }
+
+    .quote-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(52, 211, 153, 0.08));
+      border-left: 4px solid var(--cyan);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .flow-step {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .step-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--cyan);
+      margin-bottom: 4px;
+    }
+
+    .step-file {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--emerald);
+      font-family: 'Cascadia Code', Consolas, monospace;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: 'Cascadia Code', Consolas, monospace;
+    }
+    .badge.auto { background: rgba(52, 211, 153, 0.15); color: var(--emerald); border: 1px solid rgba(52, 211, 153, 0.35); }
+    .badge.humano { background: rgba(251, 191, 36, 0.15); color: var(--amber); border: 1px solid rgba(251, 191, 36, 0.35); }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #64748b;
+      border-top: 1px solid rgba(148, 163, 184, 0.12);
+      padding-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: var(--cyan);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 1: CAPA -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow">Framework de Engenharia com IA</span>
+    </div>
+    <div>
+      <h1>Tech <span class="accent-cyan">OS</span></h1>
+      <p class="subtitle" style="margin-top: 16px; font-size: 22px; color: #e2e8f0;">
+        Spec-Driven Development, Context Engineering &amp; Autonomous Loop
+      </p>
+      <p class="subtitle" style="margin-top: 12px;">
+        Um sistema operacional enxuto para transformar IA de "gerador aleatório de código" em um processo previsível, rastreável e compatível com Antigravity, Claude Code, Cursor e Codex.
+      </p>
+      <div style="margin-top: 28px; display: flex; gap: 12px;">
+        <code>npx tech-os init</code>
+        <code>npx tech-os guide</code>
+      </div>
+    </div>
+    <div class="footer">
+      <span>Tech OS · v0.1.0 · github.com/rlucio01/tech-os</span>
+      <span>Página 1 / 8</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: O PROBLEMA -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow amber">Por que precisamos de processo</span>
+      <h2>O Problema do <span class="accent-amber">Vibe Coding</span> e da <span class="accent-rose">Dumb Zone</span></h2>
+      <p class="subtitle">Pedir uma feature inteira no chat e aceitar o resultado funciona para protótipos — em projetos reais gera retrabalho.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card highlight-rose">
+        <h3>1. Código que ninguém entende</h3>
+        <p>A IA gera 1.000 linhas em 2 minutos. Semanas depois surge um bug e ninguém sabe explicar por que aquela decisão foi tomada.</p>
+      </div>
+      <div class="card highlight-amber">
+        <h3>2. A "Dumb Zone" (&gt; 50% contexto)</h3>
+        <p>Modelos perdem precisão e começam a ignorar instruções quando a janela de contexto fica cheia de histórico de chat.</p>
+      </div>
+      <div class="card highlight-cyan">
+        <h3>3. Drift Arquitetural</h3>
+        <p>Sem uma especificação viva, cada conversa inventa um padrão novo, cria abstrações desnecessárias e quebra contratos existentes.</p>
+      </div>
+    </div>
+
+    <div class="quote-box">
+      Regra de Ouro antes de qualquer commit: <span class="accent-cyan">"Consigo explicar esta mudança sem abrir o chat?"</span>
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Fundamentos</span>
+      <span>Página 2 / 8</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: OS 4 PILARES & PRINCÍPIOS -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow emerald">A Resposta</span>
+      <h2>Os 4 Princípios Inegociáveis do Tech OS</h2>
+      <p class="subtitle">A IA executa código muito rápido — mas só entrega qualidade quando você define o problema antes de apertar Enter.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card highlight-cyan">
+        <h3>1. IA sugere. Engenheiro decide.</h3>
+        <p>A IA é instrumento de ampliação cognitiva. Decisões arquiteturais nunca são delegadas silenciosamente. O desenvolvedor responde pelo resultado.</p>
+      </div>
+      <div class="card highlight-emerald">
+        <h3>2. Pense antes de programar</h3>
+        <p>Declare premissas explicitamente. Exponha ambiguidades e valide contra o código real antes de escrever a primeira linha.</p>
+      </div>
+      <div class="card highlight-violet">
+        <h3>3. Código mínimo que resolve</h3>
+        <p>Combate ativo ao <em>overengineering</em>. Sem abstrações para uso único e sem flexibilidade especulativa que ninguém pediu.</p>
+      </div>
+      <div class="card highlight-amber">
+        <h3>4. Mudanças cirúrgicas</h3>
+        <p>Altere apenas o necessário para a tarefa atual. Não "melhore" código adjacente nem refatore o que não está quebrado.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Princípios</span>
+      <span>Página 3 / 8</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: VISÃO GERAL DO FLUXO -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow">Arquitetura do Processo</span>
+      <h2>O Fluxo Completo em 6 Etapas</h2>
+      <p class="subtitle">Cada etapa gera um artefato curto em <code>.tech-os/</code>, mantendo o contexto leve e rastreável.</p>
+    </div>
+
+    <div class="flow-row">
+      <div class="flow-step">
+        <div>
+          <div class="step-num">0 · FUNDAÇÃO (1x)</div>
+          <h3>tos-manifesto</h3>
+          <p>Define stack, segurança, DoD e vocabulário do projeto.</p>
+        </div>
+        <div class="step-file">00-manifesto.md<br>_dominio.md</div>
+      </div>
+      <div class="flow-step">
+        <div>
+          <div class="step-num">1 · INVESTIGAÇÃO</div>
+          <h3>tos-discovery</h3>
+          <p>Entrevista para expor premissas e incógnitas antes do código.</p>
+        </div>
+        <div class="step-file">01-discovery.md</div>
+      </div>
+      <div class="flow-step">
+        <div>
+          <div class="step-num">2 · ESPECIFICAÇÃO</div>
+          <h3>tos-blueprint</h3>
+          <p>PRD técnico, User Stories e impacto (local vs estrutural).</p>
+        </div>
+        <div class="step-file">02-blueprint.md</div>
+      </div>
+      <div class="flow-step" style="border-style: dashed;">
+        <div>
+          <div class="step-num">3 · OPCIONAL</div>
+          <h3>tos-contratos</h3>
+          <p>Endpoints, schemas, erros e regras de segurança.</p>
+        </div>
+        <div class="step-file">03-contratos.md</div>
+      </div>
+      <div class="flow-step">
+        <div>
+          <div class="step-num">4 · FATIAMENTO</div>
+          <h3>tos-planejar</h3>
+          <p>Micro-tarefas com deps e tag [AUTO] ou [HUMANO].</p>
+        </div>
+        <div class="step-file">04-plano.md</div>
+      </div>
+      <div class="flow-step" style="border-color: rgba(52, 211, 153, 0.45);">
+        <div>
+          <div class="step-num" style="color: var(--emerald);">5 · EXECUÇÃO</div>
+          <h3>tech-os run</h3>
+          <p>Loop em contexto limpo: implementa, testa e commita.</p>
+        </div>
+        <div class="step-file">1 commit / fatia</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--amber);">
+      <h3>Skill Transversal: <code>tos-sync</code> (Anti-Drift)</h3>
+      <p>Mudou um requisito no meio do caminho? Rode <code>tos-sync</code> para atualizar a spec <strong>antes</strong> de mexer no código.</p>
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Fluxo das Skills</span>
+      <span>Página 4 / 8</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: MANIFESTO & DISCOVERY -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow">Etapas 0 e 1</span>
+      <h2>Fundação (<code>tos-manifesto</code>) &amp; Incógnitas (<code>tos-discovery</code>)</h2>
+      <p class="subtitle">O <code>tos-discovery</code> entrevista você pergunta por pergunta para revelar o que você não sabia que precisava definir.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card highlight-cyan">
+        <h3><code>00-manifesto.md</code> + <code>_dominio.md</code></h3>
+        <ul>
+          <li><strong>Perfis prontos no init:</strong> <code>mvp</code>, <code>producao</code> ou <code>estudo</code>.</li>
+          <li>Carrega automaticamente a stack, o comando de teste (DoD) e as regras de segurança em toda sessão.</li>
+          <li><code>_dominio.md</code> evita que a IA invente nomes errados para entidades do seu negócio.</li>
+        </ul>
+      </div>
+      <div class="grid-2" style="gap: 10px;">
+        <div class="card">
+          <h3 class="accent-cyan">Known Knowns</h3>
+          <p>O que você já colocou no pedido inicial.</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-emerald">Known Unknowns</h3>
+          <p>Lacunas que você já sabe que precisa checar.</p>
+        </div>
+        <div class="card">
+          <h3 class="accent-amber">Unknown Knowns</h3>
+          <p>Regras óbvias do projeto que você esqueceu de dizer.</p>
+        </div>
+        <div class="card highlight-rose">
+          <h3 class="accent-rose">Unknown Unknowns</h3>
+          <p>Cenários de borda que a IA adivinharia errado sem entrevista.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Manifesto &amp; Discovery</span>
+      <span>Página 5 / 8</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: BLUEPRINT & CONTRATOS -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow">Etapas 2 e 3</span>
+      <h2>Especificação (<code>tos-blueprint</code>) &amp; Contratos (<code>tos-contratos</code>)</h2>
+      <p class="subtitle">Toda mudança é classificada quanto ao seu impacto arquitetural antes da implementação.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card highlight-emerald">
+        <h3>Impacto <span class="accent-emerald">Local</span></h3>
+        <ul>
+          <li>Não altera API pública nem schema de banco.</li>
+          <li>Não cruza fronteiras arquiteturais nem afeta múltiplos módulos críticos.</li>
+          <li><strong>Fluxo:</strong> Implementação + testes unitários + revisão normal.</li>
+        </ul>
+      </div>
+      <div class="card highlight-amber">
+        <h3>Impacto <span class="accent-amber">Estrutural</span></h3>
+        <ul>
+          <li>Altera APIs, eventos, schema de banco ou autenticação.</li>
+          <li>Cruza fronteiras entre serviços ou módulos centrais.</li>
+          <li><strong>Fluxo:</strong> Validação humana obrigatória + <code>tos-contratos</code> + testes de integração.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>O que entra no <code>03-contratos.md</code> (quando necessário)</h3>
+      <p>Rotas e métodos HTTP, schemas de entrada/saída, códigos de erro esperados (<code>400</code>, <code>401</code>, <code>404</code>, <code>409</code>), migrações de banco e campos sensíveis que nunca podem aparecer em logs.</p>
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Blueprint &amp; Contratos</span>
+      <span>Página 6 / 8</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: PLANEJAR & RUNNER -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow emerald">Etapas 4 e 5</span>
+      <h2>Fatiamento (<code>tos-planejar</code>) &amp; Loop Limpo (<code>tech-os run</code>)</h2>
+      <p class="subtitle">Cada fatia é executada em uma sessão nova da IA, evitando a <em>dumb zone</em>.</p>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <pre># 04-plano.md
+- [x] F01 [AUTO] Schema de usuários | deps: - | us: US-1
+- [ ] F02 [AUTO] Service de login   | deps: F01 | us: US-1
+- [ ] F03 [HUMANO] Revisar JWT      | deps: F02 | us: -
+- [ ] F04 [AUTO] Rota + testes      | deps: F03 | us: US-1</pre>
+        <div style="margin-top: 12px; display: flex; gap: 10px;">
+          <span class="badge auto">[AUTO]</span> <span style="font-size: 13px; color: #cbd5e1;">IA executa e commita sozinha</span>
+        </div>
+        <div style="margin-top: 6px; display: flex; gap: 10px;">
+          <span class="badge humano">[HUMANO]</span> <span style="font-size: 13px; color: #cbd5e1;">Loop pausa e pede sua revisão</span>
+        </div>
+      </div>
+
+      <div class="card highlight-emerald">
+        <h3>Como o <code>tech-os run</code> funciona</h3>
+        <ul>
+          <li>Lê <code>04-plano.md</code> e pega a próxima fatia <code>[AUTO]</code> desbloqueada.</li>
+          <li>Injeta <strong>apenas</strong>: <code>00-manifesto.md</code> + <code>_dominio.md</code> + spec + fatia atual.</li>
+          <li>Chama o agente (Claude Code, Codex ou comando customizado).</li>
+          <li>Roda o comando de verificação (DoD).</li>
+          <li>Passou? Marca <code>[x]</code> e cria <code>git commit -m "feat(F02): ..."</code>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Execução Autônoma</span>
+      <span>Página 7 / 8</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: REFERÊNCIA DA CLI -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow">Guia de Referência</span>
+      <h2>Comandos da CLI &amp; Como Começar</h2>
+      <p class="subtitle">Compatível com Antigravity, Claude Code, Cursor e Codex em qualquer sistema operacional.</p>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Comando</th>
+            <th>Objetivo</th>
+            <th>Opções principais</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>tech-os init</code></td>
+            <td>Instala skills, regras e cria <code>.tech-os/</code> no projeto</td>
+            <td><code>--tools antigravity,claude,cursor,codex</code> · <code>--profile mvp|producao|estudo</code> · <code>-y</code></td>
+          </tr>
+          <tr>
+            <td><code>tech-os status</code></td>
+            <td>Mostra o progresso das features e próxima fatia</td>
+            <td>Lê automaticamente todas as pastas em <code>.tech-os/</code></td>
+          </tr>
+          <tr>
+            <td><code>tech-os run &lt;feature&gt;</code></td>
+            <td>Executa fatias <code>[AUTO]</code> em contexto limpo + DoD + commit</td>
+            <td><code>--dry-run</code> · <code>--runner claude|codex|custom</code> · <code>--test-cmd</code> · <code>--no-commit</code></td>
+          </tr>
+          <tr>
+            <td><code>tech-os guide</code></td>
+            <td>Exibe resumo didático da metodologia no terminal</td>
+            <td>Ideal para onboarding rápido de amigos e colegas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <pre># Em qualquer projeto novo ou existente:
+npx tech-os init
+
+# Visualizar o prompt em contexto limpo antes de rodar o loop:
+tech-os run 001-minha-feature --dry-run</pre>
+
+    <div class="footer">
+      <span>Tech OS · github.com/rlucio01/tech-os · npmjs.com/package/tech-os</span>
+      <span>Página 8 / 8</span>
+    </div>
+  </section>
+
+</body>
+</html>
