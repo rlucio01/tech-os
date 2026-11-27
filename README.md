@@ -167,6 +167,18 @@ seu-projeto/
 
 ---
 
+## E em projetos que já estão em produção?
+
+**Sim — o Tech OS foi pensado para adoção incremental sem quebrar o que já funciona:**
+
+1. **Zero impacto no código atual:** rodar `npx tech-os init` apenas cria `.tech-os/` e as regras (`AGENTS.md` / `.agents/skills/`). Nenhum arquivo da sua aplicação é alterado.
+2. **Mapeamento do padrão existente (`tos-manifesto`):** ao rodar `tos-manifesto`, a IA inspeciona o repositório atual (stack, pastas, testes, linter) e documenta as regras reais em `00-manifesto.md` e `_dominio.md` — evitando que futuras mudanças inventem padrões diferentes.
+3. **Padronização daqui para frente:** novas features e correções passam a seguir `tos-discovery` → `tos-blueprint` (com trava para mudanças **`estruturais`**) → `tos-security` → `tos-planejar`.
+4. **Mudanças cirúrgicas:** a regra de *"não refatorar o que não está quebrado"* protege sistemas em produção contra alterações gigantes e arriscadas.
+5. **Segurança imediata:** `tech-os doctor` e o `Secret Guard` já protegem o repositório contra vazamento de `.env` e credenciais desde o primeiro dia.
+
+---
+
 ## Licença
 
 MIT
