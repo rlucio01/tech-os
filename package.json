@@ -4,8 +4,8 @@
   "description": "Spec-Driven Development, Context Engineering & Autonomous Loop framework for AI-assisted coding.",
   "type": "module",
   "bin": {
-    "tech-os": "./dist/cli.js",
-    "tos": "./dist/cli.js"
+    "tech-os": "dist/cli.js",
+    "tos": "dist/cli.js"
   },
   "files": [
     "dist",
