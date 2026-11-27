@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.2] - 2026-11-27
+### Melhorado
+- **Slash Commands (`/tos-*`) no Antigravity:** `tech-os init` e `tech-os update` agora também geram `.agents/workflows/tos-*.md`, permitindo acionar todas as skills diretamente digitando `/` no chat do Antigravity (além do acionamento em linguagem natural).
+- **Onboarding mais claro:** `tech-os init` agora orienta explicitamente a usar `/tos-manifesto`, `/tos-discovery` e `git init` em projetos novos.
+
 ## [0.2.1] - 2026-11-27
 ### Melhorado
 - **Padrão de Design (`shadcn/ui`):** Quando nenhum Design System é especificado em projetos com Frontend/UI (novos ou React/Next/Tailwind), `AGENTS.md`/`CLAUDE.md`/Cursor, `tos-design` e `_design.md` adotam automaticamente **shadcn/ui** (`https://ui.shadcn.com/`) + Tailwind CSS + Lucide, respeitando libs já existentes no codebase.

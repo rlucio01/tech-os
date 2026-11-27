@@ -13,7 +13,7 @@ const program = new Command();
 program
   .name('tech-os')
   .description('Tech OS — Spec-Driven Development, Context Engineering & Autonomous Loop')
-  .version('0.2.1');
+  .version('0.2.2');
 
 program
   .command('init')

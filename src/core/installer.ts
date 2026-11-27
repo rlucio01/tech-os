@@ -33,6 +33,29 @@ async function copySkills(targetDir: string): Promise<number> {
   return count;
 }
 
+function extractDescription(skillContent: string, skillName: string): string {
+  const match = skillContent.match(/^description:\s*(.+)$/m);
+  return match ? match[1].trim() : `Executa a skill ${skillName} do Tech OS`;
+}
+
+async function copyWorkflows(targetDir: string): Promise<number> {
+  const skillsSrc = getTemplatePath('skills');
+  const entries = await fs.readdir(skillsSrc, { withFileTypes: true });
+  await fs.mkdir(targetDir, { recursive: true });
+  let count = 0;
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const skillContent = await fs.readFile(path.join(skillsSrc, entry.name, 'SKILL.md'), 'utf-8');
+    const description = extractDescription(skillContent, entry.name);
+    const workflowContent = `---\ndescription: ${description}\n---\n\nLeia e siga rigorosamente as instruções da skill \`${entry.name}\` em \`.agents/skills/${entry.name}/SKILL.md\`.\n`;
+    await fs.writeFile(path.join(targetDir, `${entry.name}.md`), workflowContent, 'utf-8');
+    count++;
+  }
+
+  return count;
+}
+
 /**
  * Inserts or replaces the Tech OS block inside a markdown rule file (AGENTS.md / CLAUDE.md).
  */
@@ -100,6 +123,8 @@ export async function installToolsAndRules(tools: ToolTarget[], cwd: string): Pr
   if (tools.includes('antigravity')) {
     const count = await copySkills(path.join(cwd, '.agents', 'skills'));
     actions.push(`.agents/skills/ (${count} skills)`);
+    const wfCount = await copyWorkflows(path.join(cwd, '.agents', 'workflows'));
+    actions.push(`.agents/workflows/ (${wfCount} comandos /)`);
   }
 
   if (tools.includes('claude')) {

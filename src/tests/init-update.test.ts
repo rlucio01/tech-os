@@ -34,12 +34,18 @@ describe('init & update', () => {
       const manifestoAfterUpdate = await fs.readFile(manifestoPath, 'utf-8');
       assert.equal(manifestoAfterUpdate, '# Custom Manifesto\n');
 
-      // Check new v0.2.0 skills were copied
+      // Check new v0.2.0 skills and v0.2.2 slash workflows were copied
       const secSkill = await fs.readFile(
         path.join(tmpDir, '.agents', 'skills', 'tos-security', 'SKILL.md'),
         'utf-8'
       );
       assert.match(secSkill, /tos-security/);
+
+      const discoveryWorkflow = await fs.readFile(
+        path.join(tmpDir, '.agents', 'workflows', 'tos-discovery.md'),
+        'utf-8'
+      );
+      assert.match(discoveryWorkflow, /tos-discovery/);
     } finally {
       await fs.rm(tmpDir, { recursive: true, force: true });
     }

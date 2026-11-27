@@ -99,7 +99,7 @@ export async function runInit(options: InitOptions, cwd: string = process.cwd())
   }
 
   console.log(pc.bold('\nPróximos passos:'));
-  console.log(`  1. Ajuste a stack em ${pc.cyan('.tech-os/00-manifesto.md')} (ou rode a skill ${pc.cyan('tos-manifesto')})`);
-  console.log(`  2. Na sua próxima feature, chame a skill ${pc.cyan('tos-discovery')} no seu agente`);
-  console.log(`  3. Valide o ambiente com ${pc.cyan('tech-os doctor')} e acompanhe com ${pc.cyan('tech-os status')}\n`);
+  console.log(`  1. Ajuste a stack em ${pc.cyan('.tech-os/00-manifesto.md')} (ou digite ${pc.cyan('/tos-manifesto')} no chat)`);
+  console.log(`  2. Na sua próxima feature, digite ${pc.cyan('/tos-discovery')} (ou peça: "Use a skill tos-discovery")`);
+  console.log(`  3. Se for projeto novo, rode ${pc.cyan('git init')} e valide com ${pc.cyan('tech-os doctor')}\n`);
 }

@@ -51,7 +51,7 @@ npm install -g tech-os
 Inicializa o Tech OS no projeto atual. Pergunta quais ferramentas de IA você usa e qual perfil de rigor deseja para o manifesto.
 
 **O que ele cria:**
-- **Antigravity**: `.agents/skills/tos-*/SKILL.md` + bloco no `AGENTS.md`
+- **Antigravity**: `.agents/skills/tos-*/SKILL.md` + `.agents/workflows/tos-*.md` (comandos `/tos-*`) + bloco no `AGENTS.md`
 - **Claude Code**: `.claude/skills/tos-*/SKILL.md` + bloco no `CLAUDE.md`
 - **Cursor**: `.cursor/rules/tech-os.mdc`
 - **Codex / Outros**: `AGENTS.md`
@@ -131,7 +131,7 @@ Exibe no terminal um resumo didático da metodologia (por que usar, os 4 tipos d
 
 ## Fluxo das Skills (`tos-*`)
 
-No chat do seu agente (Antigravity, Claude Code, Cursor), você aciona as skills conforme a etapa da feature:
+No chat do seu agente (Antigravity, Claude Code, Cursor), você aciona as skills digitando **`/tos-...`** (no Antigravity/Claude Code) ou pedindo em linguagem natural (ex.: *"Use a skill `tos-discovery`"*):
 
 | Ordem | Skill | Arquivo gerado | Objetivo |
 | :--- | :--- | :--- | :--- |
