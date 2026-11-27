@@ -20,17 +20,22 @@ export function runGuide(): void {
   console.log('   • Unknown Knowns:   regras óbvias do dia a dia que você esquece de dizer.');
   console.log(`   • ${pc.red('Unknown Unknowns:')} cenários de borda que nem você sabia que existiam.\n`);
 
-  console.log(pc.bold('4. O Fluxo das 6 Skills (Spec-Driven Development)'));
+  console.log(pc.bold('4. O Fluxo das Skills (Spec-Driven Development)'));
   console.log(`   0. ${pc.cyan('tos-manifesto')}  → Cria a "lei" do projeto (00-manifesto.md + _dominio.md)`);
   console.log(`   1. ${pc.cyan('tos-discovery')}  → Entrevista para alinhar problema e incógnitas (01-discovery.md)`);
   console.log(`   2. ${pc.cyan('tos-blueprint')}  → PRD técnico + impacto local/estrutural (02-blueprint.md)`);
+  console.log(`   *  ${pc.cyan('tos-design')}     → Especificação visual e estados de UI (02-design.md, opc.)`);
   console.log(`   3. ${pc.cyan('tos-contratos')}  → Contratos de API/schema/segurança (03-contratos.md, opc.)`);
   console.log(`   4. ${pc.cyan('tos-planejar')}   → Fatias executáveis [AUTO] e [HUMANO] (04-plano.md)`);
+  console.log(`   *  ${pc.cyan('tos-security')}   → Auditoria de segurança antes de fechar PR/feature`);
   console.log(`   *  ${pc.cyan('tos-sync')}       → Atualiza a spec ANTES do código se algo mudar\n`);
 
   console.log(pc.bold('5. Comandos da CLI'));
   console.log(`   ${pc.green('tech-os init')}              Instala skills, regras e manifesto no projeto`);
+  console.log(`   ${pc.green('tech-os update')}            Atualiza skills/regras mantendo .tech-os/ intacto`);
+  console.log(`   ${pc.green('tech-os new <slug>')}        Cria nova pasta numerada .tech-os/00X-<slug>/`);
   console.log(`   ${pc.green('tech-os status')}            Mostra progresso das features e próxima fatia`);
-  console.log(`   ${pc.green('tech-os run <feature>')}     Executa fatias [AUTO] em contexto limpo + commit`);
+  console.log(`   ${pc.green('tech-os run <feature>')}     Executa fatias [AUTO] em contexto limpo + Secret Guard`);
+  console.log(`   ${pc.green('tech-os doctor')}            Diagnostica Git, .gitignore, runners e segredos`);
   console.log(`   ${pc.green('tech-os guide')}             Exibe este guia no terminal\n`);
 }

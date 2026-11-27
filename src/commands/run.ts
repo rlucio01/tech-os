@@ -9,6 +9,7 @@ import {
   readPlanFile,
   updateSliceStatus,
 } from '../core/plan-parser.js';
+import { scanWorkingTreeForSecrets } from '../core/secret-guard.js';
 
 export type RunnerType = 'claude' | 'codex' | 'custom';
 
@@ -39,6 +40,7 @@ function buildCleanPrompt(params: {
   slice: PlanSlice;
   manifesto: string;
   dominio: string;
+  design: string;
   blueprint: string;
   contratos: string;
 }): string {
@@ -53,18 +55,11 @@ function buildCleanPrompt(params: {
     `- Feature: ${params.feature}`,
   ];
 
-  if (params.manifesto) {
-    parts.push('', '## 00-manifesto.md', params.manifesto.trim());
-  }
-  if (params.dominio) {
-    parts.push('', '## _dominio.md', params.dominio.trim());
-  }
-  if (params.blueprint) {
-    parts.push('', '## 02-blueprint.md', params.blueprint.trim());
-  }
-  if (params.contratos) {
-    parts.push('', '## 03-contratos.md', params.contratos.trim());
-  }
+  if (params.manifesto) parts.push('', '## 00-manifesto.md', params.manifesto.trim());
+  if (params.dominio) parts.push('', '## _dominio.md', params.dominio.trim());
+  if (params.design) parts.push('', '## _design.md', params.design.trim());
+  if (params.blueprint) parts.push('', '## 02-blueprint.md', params.blueprint.trim());
+  if (params.contratos) parts.push('', '## 03-contratos.md', params.contratos.trim());
 
   parts.push(
     '',
@@ -115,6 +110,11 @@ function runShellCommand(command: string): boolean {
   return res.status === 0;
 }
 
+function printSummary(completedSlices: string[], startTimeMs: number): void {
+  const elapsedSec = ((Date.now() - startTimeMs) / 1000).toFixed(1);
+  console.log(pc.dim(`  Resumo: ${completedSlices.length} fatia(s) concluída(s) [${completedSlices.join(', ') || '-'}] em ${elapsedSec}s\n`));
+}
+
 export async function runLoop(
   feature: string,
   maxIterationsArg: string | undefined,
@@ -140,12 +140,15 @@ export async function runLoop(
 
   const manifesto = await readIfExists(path.join(techOsDir, '00-manifesto.md'));
   const dominio = await readIfExists(path.join(techOsDir, '_dominio.md'));
+  const design = await readIfExists(path.join(techOsDir, '_design.md'));
   const blueprint = await readIfExists(path.join(featureDir, '02-blueprint.md'));
   const contratos = await readIfExists(path.join(featureDir, '03-contratos.md'));
 
   const testCmd = extractTestCommand(manifesto, options.testCmd);
   const runner: RunnerType = options.runner ?? 'claude';
   const shouldCommit = options.commit !== false;
+  const startTimeMs = Date.now();
+  const completedSlices: string[] = [];
 
   console.log(pc.bold(pc.cyan(`\n🔁 Tech OS Runner — ${feature}\n`)));
   console.log(`  Runner: ${runner}${options.dryRun ? pc.yellow(' (dry-run)') : ''}`);
@@ -158,20 +161,20 @@ export async function runLoop(
     if (!next) {
       const allDone = slices.length > 0 && slices.every((s) => s.status === 'done');
       if (allDone) {
-        console.log(pc.green('✓ Todas as fatias foram concluídas! <promise>COMPLETE</promise>\n'));
+        console.log(pc.green('✓ Todas as fatias foram concluídas! <promise>COMPLETE</promise>'));
       } else {
-        console.log(pc.yellow('⚠ Nenhuma fatia desbloqueada encontrada. Verifique dependências em 04-plano.md.\n'));
+        console.log(pc.yellow('⚠ Nenhuma fatia desbloqueada encontrada. Verifique dependências em 04-plano.md.'));
       }
+      printSummary(completedSlices, startTimeMs);
       return;
     }
 
     if (next.mode === 'HUMANO') {
+      console.log(pc.yellow(`⏸ Pausado em ${next.id} [HUMANO]: ${next.title}`));
       console.log(
-        pc.yellow(`⏸ Pausado em ${next.id} [HUMANO]: ${next.title}`)
+        pc.dim(`  Conclua esta etapa manualmente, marque [x] em 04-plano.md e rode "tech-os run ${feature}" novamente.`)
       );
-      console.log(
-        pc.dim(`  Conclua esta etapa manualmente, marque [x] em 04-plano.md e rode "tech-os run ${feature}" novamente.\n`)
-      );
+      printSummary(completedSlices, startTimeMs);
       return;
     }
 
@@ -182,6 +185,7 @@ export async function runLoop(
       slice: next,
       manifesto,
       dominio,
+      design,
       blueprint,
       contratos,
     });
@@ -199,6 +203,7 @@ export async function runLoop(
     if (!agentOk) {
       console.log(pc.red(`✗ Runner falhou na fatia ${next.id}. Marcando [~] e interrompendo.`));
       process.exitCode = 1;
+      printSummary(completedSlices, startTimeMs);
       return;
     }
 
@@ -208,11 +213,26 @@ export async function runLoop(
       if (!testOk) {
         console.log(pc.red(`✗ DoD falhou na fatia ${next.id}. Marcando [~] e interrompendo.`));
         process.exitCode = 1;
+        printSummary(completedSlices, startTimeMs);
+        return;
+      }
+    }
+
+    if (shouldCommit) {
+      const secrets = await scanWorkingTreeForSecrets(cwd);
+      if (secrets.length > 0) {
+        console.log(pc.red(`✗ Secret Guard bloqueou o commit da fatia ${next.id}:`));
+        for (const s of secrets) {
+          console.log(`  ${pc.red('•')} ${s.file}: ${s.reason}`);
+        }
+        process.exitCode = 1;
+        printSummary(completedSlices, startTimeMs);
         return;
       }
     }
 
     await updateSliceStatus(planPath, next.id, 'done');
+    completedSlices.push(next.id);
     console.log(pc.green(`✓ ${next.id} concluída!`));
 
     if (shouldCommit) {
@@ -227,5 +247,6 @@ export async function runLoop(
     console.log('');
   }
 
-  console.log(pc.yellow(`⏹ Limite de ${maxIterations} iterações atingido.\n`));
+  console.log(pc.yellow(`⏹ Limite de ${maxIterations} iterações atingido.`));
+  printSummary(completedSlices, startTimeMs);
 }

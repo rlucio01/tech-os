@@ -269,7 +269,7 @@
       </div>
     </div>
     <div class="footer">
-      <span>Tech OS · v0.1.0 · github.com/rlucio01/tech-os</span>
+      <span>Tech OS · v0.2.0 · github.com/rlucio01/tech-os</span>
       <span>Página 1 / 8</span>
     </div>
   </section>
@@ -400,8 +400,8 @@
     </div>
 
     <div class="card" style="border-left: 4px solid var(--amber);">
-      <h3>Skill Transversal: <code>tos-sync</code> (Anti-Drift)</h3>
-      <p>Mudou um requisito no meio do caminho? Rode <code>tos-sync</code> para atualizar a spec <strong>antes</strong> de mexer no código.</p>
+      <h3>Skills Transversais: <code>tos-design</code> · <code>tos-security</code> · <code>tos-sync</code></h3>
+      <p><strong>UI:</strong> <code>tos-design</code> define estados e layout antes do código · <strong>Segurança:</strong> <code>tos-security</code> audita antes do PR · <strong>Anti-Drift:</strong> <code>tos-sync</code> atualiza a spec se o requisito mudar.</p>
     </div>
 
     <div class="footer">
@@ -553,16 +553,21 @@
           <tr>
             <td><code>tech-os init</code></td>
             <td>Instala skills, regras e cria <code>.tech-os/</code> no projeto</td>
-            <td><code>--tools antigravity,claude,cursor,codex</code> · <code>--profile mvp|producao|estudo</code> · <code>-y</code></td>
+            <td><code>--tools</code> · <code>--profile mvp|producao|estudo</code> · <code>--design</code> · <code>-y</code></td>
           </tr>
           <tr>
-            <td><code>tech-os status</code></td>
-            <td>Mostra o progresso das features e próxima fatia</td>
-            <td>Lê automaticamente todas as pastas em <code>.tech-os/</code></td>
+            <td><code>tech-os update</code> / <code>new</code></td>
+            <td>Atualiza skills sem tocar em <code>.tech-os/</code> · cria <code>00X-slug</code></td>
+            <td><code>tech-os update</code> · <code>tech-os new &lt;slug&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>tech-os status</code> / <code>doctor</code></td>
+            <td>Progresso das features · diagnóstico Git, <code>.env</code> e Secret Guard</td>
+            <td>Verifica saúde e segredos locais automaticamente</td>
           </tr>
           <tr>
             <td><code>tech-os run &lt;feature&gt;</code></td>
-            <td>Executa fatias <code>[AUTO]</code> em contexto limpo + DoD + commit</td>
+            <td>Executa fatias <code>[AUTO]</code> em contexto limpo + Secret Guard + commit</td>
             <td><code>--dry-run</code> · <code>--runner claude|codex|custom</code> · <code>--test-cmd</code> · <code>--no-commit</code></td>
           </tr>
           <tr>

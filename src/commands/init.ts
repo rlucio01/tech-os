@@ -1,71 +1,17 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { checkbox, select } from '@inquirer/prompts';
+import { checkbox, confirm, select } from '@inquirer/prompts';
 import pc from 'picocolors';
+import { fileExists, installToolsAndRules, ToolTarget } from '../core/installer.js';
 import { getTechOsDir, getTemplatePath } from '../core/paths.js';
 
-export type ToolTarget = 'antigravity' | 'claude' | 'cursor' | 'codex';
 export type ManifestoProfile = 'mvp' | 'producao' | 'estudo';
 
 export interface InitOptions {
   yes?: boolean;
   tools?: string;
   profile?: ManifestoProfile;
-}
-
-const START_MARKER = '<!-- tech-os:start -->';
-const END_MARKER = '<!-- tech-os:end -->';
-
-async function exists(targetPath: string): Promise<boolean> {
-  try {
-    await fs.access(targetPath);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function copySkills(targetDir: string): Promise<number> {
-  const skillsSrc = getTemplatePath('skills');
-  const entries = await fs.readdir(skillsSrc, { withFileTypes: true });
-  let count = 0;
-
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
-    const srcSkill = path.join(skillsSrc, entry.name, 'SKILL.md');
-    const destDir = path.join(targetDir, entry.name);
-    await fs.mkdir(destDir, { recursive: true });
-    await fs.copyFile(srcSkill, path.join(destDir, 'SKILL.md'));
-    count++;
-  }
-
-  return count;
-}
-
-/**
- * Inserts or replaces the Tech OS block inside a markdown rule file (AGENTS.md / CLAUDE.md).
- */
-async function upsertMarkedSection(filePath: string, coreContent: string): Promise<void> {
-  const block = `${START_MARKER}\n${coreContent.trim()}\n${END_MARKER}`;
-
-  if (!(await exists(filePath))) {
-    await fs.writeFile(filePath, `${block}\n`, 'utf-8');
-    return;
-  }
-
-  const existing = await fs.readFile(filePath, 'utf-8');
-  const startIdx = existing.indexOf(START_MARKER);
-  const endIdx = existing.indexOf(END_MARKER);
-
-  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
-    const before = existing.slice(0, startIdx);
-    const after = existing.slice(endIdx + END_MARKER.length);
-    await fs.writeFile(filePath, `${before}${block}${after}`, 'utf-8');
-    return;
-  }
-
-  const separator = existing.endsWith('\n') ? '\n' : '\n\n';
-  await fs.writeFile(filePath, `${existing}${separator}${block}\n`, 'utf-8');
+  design?: boolean;
 }
 
 function parseToolsFlag(raw?: string): ToolTarget[] | null {
@@ -83,6 +29,7 @@ export async function runInit(options: InitOptions, cwd: string = process.cwd())
 
   let tools: ToolTarget[] = parseToolsFlag(options.tools) ?? [];
   let profile: ManifestoProfile = options.profile ?? 'mvp';
+  let includeDesign = Boolean(options.design);
 
   if (options.yes) {
     if (tools.length === 0) tools = ['antigravity'];
@@ -111,53 +58,39 @@ export async function runInit(options: InitOptions, cwd: string = process.cwd())
         default: 'mvp',
       });
     }
+
+    if (options.design === undefined) {
+      includeDesign = await confirm({
+        message: 'O projeto tem Frontend/UI e você quer criar .tech-os/_design.md?',
+        default: false,
+      });
+    }
   }
 
-  const coreRules = await fs.readFile(getTemplatePath('rules', 'tech-os-core.md'), 'utf-8');
-  const installedActions: string[] = [];
-
-  if (tools.includes('antigravity') || tools.includes('codex')) {
-    await upsertMarkedSection(path.join(cwd, 'AGENTS.md'), coreRules);
-    installedActions.push('AGENTS.md');
-  }
-
-  if (tools.includes('antigravity')) {
-    const count = await copySkills(path.join(cwd, '.agents', 'skills'));
-    installedActions.push(`.agents/skills/ (${count} skills)`);
-  }
-
-  if (tools.includes('claude')) {
-    await upsertMarkedSection(path.join(cwd, 'CLAUDE.md'), coreRules);
-    const count = await copySkills(path.join(cwd, '.claude', 'skills'));
-    installedActions.push(`CLAUDE.md + .claude/skills/ (${count} skills)`);
-  }
-
-  if (tools.includes('cursor')) {
-    const cursorDir = path.join(cwd, '.cursor', 'rules');
-    await fs.mkdir(cursorDir, { recursive: true });
-    const cursorTemplate = await fs.readFile(getTemplatePath('rules', 'cursor-rule.mdc'), 'utf-8');
-    await fs.writeFile(
-      path.join(cursorDir, 'tech-os.mdc'),
-      cursorTemplate.replace('{{CORE_RULES}}', coreRules.trim()),
-      'utf-8'
-    );
-    installedActions.push('.cursor/rules/tech-os.mdc');
-  }
+  const installedActions = await installToolsAndRules(tools, cwd);
 
   // Create .tech-os/ foundation if missing
   const techOsDir = getTechOsDir(cwd);
   await fs.mkdir(techOsDir, { recursive: true });
 
   const manifestoDest = path.join(techOsDir, '00-manifesto.md');
-  if (!(await exists(manifestoDest))) {
+  if (!(await fileExists(manifestoDest))) {
     await fs.copyFile(getTemplatePath('profiles', `${profile}.md`), manifestoDest);
     installedActions.push(`.tech-os/00-manifesto.md (perfil: ${profile})`);
   }
 
   const dominioDest = path.join(techOsDir, '_dominio.md');
-  if (!(await exists(dominioDest))) {
+  if (!(await fileExists(dominioDest))) {
     await fs.copyFile(getTemplatePath('profiles', '_dominio.md'), dominioDest);
     installedActions.push('.tech-os/_dominio.md');
+  }
+
+  if (includeDesign) {
+    const designDest = path.join(techOsDir, '_design.md');
+    if (!(await fileExists(designDest))) {
+      await fs.copyFile(getTemplatePath('profiles', '_design.md'), designDest);
+      installedActions.push('.tech-os/_design.md');
+    }
   }
 
   console.log(pc.green('✓ Tech OS configurado com sucesso!\n'));
@@ -168,5 +101,5 @@ export async function runInit(options: InitOptions, cwd: string = process.cwd())
   console.log(pc.bold('\nPróximos passos:'));
   console.log(`  1. Ajuste a stack em ${pc.cyan('.tech-os/00-manifesto.md')} (ou rode a skill ${pc.cyan('tos-manifesto')})`);
   console.log(`  2. Na sua próxima feature, chame a skill ${pc.cyan('tos-discovery')} no seu agente`);
-  console.log(`  3. Acompanhe o progresso com ${pc.cyan('tech-os status')}\n`);
+  console.log(`  3. Valide o ambiente com ${pc.cyan('tech-os doctor')} e acompanhe com ${pc.cyan('tech-os status')}\n`);
 }

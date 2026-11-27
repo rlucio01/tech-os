@@ -1,6 +1,6 @@
 {
   "name": "tech-os",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Spec-Driven Development, Context Engineering & Autonomous Loop framework for AI-assisted coding.",
   "type": "module",
   "bin": {
@@ -17,7 +17,8 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
-    "test": "node --test dist/tests/*.test.js"
+    "test": "node --test dist/tests/*.test.js",
+    "docs:pdf": "chrome --headless --disable-gpu --no-pdf-header-footer --print-to-pdf=docs/tech-os-guia.pdf docs/tech-os-guia.html"
   },
   "keywords": [
     "ai",

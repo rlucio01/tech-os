@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { runInit } from './commands/init.js';
+import { runUpdate } from './commands/update.js';
 import { runStatus } from './commands/status.js';
 import { runLoop, RunnerType } from './commands/run.js';
+import { runDoctor } from './commands/doctor.js';
+import { runNewFeature } from './commands/new.js';
 import { runGuide } from './commands/guide.js';
 
 const program = new Command();
@@ -10,7 +13,7 @@ const program = new Command();
 program
   .name('tech-os')
   .description('Tech OS — Spec-Driven Development, Context Engineering & Autonomous Loop')
-  .version('0.1.0');
+  .version('0.2.0');
 
 program
   .command('init')
@@ -18,8 +21,23 @@ program
   .option('-y, --yes', 'Usa configurações padrão sem perguntas interativas')
   .option('-t, --tools <tools>', 'Lista separada por vírgula: antigravity,claude,cursor,codex')
   .option('-p, --profile <profile>', 'Perfil do manifesto: mvp | producao | estudo')
+  .option('-d, --design', 'Cria também o arquivo .tech-os/_design.md para projetos com UI')
   .action(async (options) => {
     await runInit(options);
+  });
+
+program
+  .command('update')
+  .description('Atualiza skills e regras de contexto sem sobrescrever .tech-os/')
+  .action(async () => {
+    await runUpdate();
+  });
+
+program
+  .command('new <slug>')
+  .description('Cria uma nova pasta numerada em .tech-os/<NNN>-<slug>/')
+  .action(async (slug: string) => {
+    await runNewFeature(slug);
   });
 
 program
@@ -45,6 +63,13 @@ program
       dryRun: Boolean(options.dryRun),
       commit: options.commit,
     });
+  });
+
+program
+  .command('doctor')
+  .description('Verifica saúde do ambiente (Git, .gitignore, runners e Secret Guard)')
+  .action(async () => {
+    await runDoctor();
   });
 
 program

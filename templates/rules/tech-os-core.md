@@ -6,6 +6,7 @@ Este projeto utiliza o **Tech OS** (Spec-Driven Development + Context Engineerin
 Sempre que iniciar uma tarefa, consulte (se existirem):
 - `.tech-os/00-manifesto.md` — regras, stack, segurança e DoD do projeto
 - `.tech-os/_dominio.md` — vocabulário e regras de negócio
+- `.tech-os/_design.md` — padrões visuais e de UI (se houver frontend)
 
 ## Princípios Inegociáveis
 1. **IA sugere; engenheiro decide.** Nunca tome decisões arquiteturais silenciosas.
@@ -23,6 +24,8 @@ Antes de implementar qualquer mudança:
 - `tos-manifesto` — cria `00-manifesto.md` e `_dominio.md` (1x por projeto)
 - `tos-discovery` — entrevista para mapear incógnitas (`01-discovery.md`)
 - `tos-blueprint` — PRD técnico e impacto (`02-blueprint.md`)
-- `tos-contratos` — contratos de API/dados (`03-contratos.md`, opcional)
+- `tos-design` — especificação visual e estados de UI (`02-design.md`, opcional)
+- `tos-contratos` — contratos de API/schema/segurança (`03-contratos.md`, opcional)
 - `tos-planejar` — plano fatiado `[AUTO]` / `[HUMANO]` (`04-plano.md`)
+- `tos-security` — auditoria de segurança antes de fechar PR/feature
 - `tos-sync` — atualiza a spec antes do código quando um requisito muda

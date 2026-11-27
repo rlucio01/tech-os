@@ -64,11 +64,27 @@ Inicializa o Tech OS no projeto atual. Pergunta quais ferramentas de IA você us
   - `mvp`: pragmático, testes nos fluxos críticos.
   - `producao`: rigor alto, baseline de segurança, meta de cobertura >= 80%.
   - `estudo`: foco em clareza, aprendizado e explicação de trade-offs.
+- `-d, --design` — Cria também `.tech-os/_design.md` para projetos com Frontend/UI.
 
 **Exemplo:**
 ```bash
-tech-os init --tools antigravity,cursor --profile producao
+tech-os init --tools antigravity,cursor --profile producao --design
 ```
+
+---
+
+### `tech-os update`
+Atualiza as skills (`tos-*`) e os blocos de regras (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules/tech-os.mdc`) para a versão mais recente do Tech OS **sem sobrescrever** `.tech-os/00-manifesto.md`, `_dominio.md`, `_design.md` ou suas specs.
+
+---
+
+### `tech-os new <slug>`
+Cria automaticamente a próxima pasta numerada da feature em `.tech-os/<NNN>-<slug>/` com um `01-discovery.md` inicial.
+
+---
+
+### `tech-os doctor`
+Faz um diagnóstico de saúde do projeto: verifica se há Git inicializado, se o `.gitignore` protege `.env`, se `.tech-os/00-manifesto.md` existe, quais runners (`claude`, `codex`) estão no PATH e roda o **Secret Guard** nas alterações locais.
 
 ---
 
@@ -122,9 +138,11 @@ No chat do seu agente (Antigravity, Claude Code, Cursor), você aciona as skills
 | **0** | **`tos-manifesto`** | `.tech-os/00-manifesto.md`<br>`.tech-os/_dominio.md` | Define stack, segurança, DoD e vocabulário do projeto. Roda **1x por projeto**. |
 | **1** | **`tos-discovery`** | `01-discovery.md` | Entrevista você pergunta por pergunta para revelar **Unknown Knowns** e **Unknown Unknowns** antes de codar. |
 | **2** | **`tos-blueprint`** | `02-blueprint.md` | Formaliza o PRD técnico com User Stories, módulos afetados, testes e classificação de impacto (**`local`** vs **`estrutural`**). |
+| **2.5** | **`tos-design`** | `02-design.md` *(opcional)* | Define hierarquia visual, estados (`loading`, `empty`, `error`, `success`), responsividade e acessibilidade para UI. |
 | **3** | **`tos-contratos`** | `03-contratos.md` *(opcional)* | Detalha rotas de API, schemas de dados, códigos de erro e regras de segurança. |
 | **4** | **`tos-planejar`** | `04-plano.md` | Quebra a entrega em fatias executáveis (`F01`, `F02`...) com dependências e marcação `[AUTO]` ou `[HUMANO]`. |
-| **5** | **`tos-sync`** | *(atualiza os `.md`)* | Atualiza a especificação **antes** do código quando um requisito muda no meio do caminho (evita *spec drift*). |
+| **5** | **`tos-security`** | *(auditoria)* | Audita segredos, validação de input, auth, PII em logs e dependências antes de fechar PR/feature. |
+| **6** | **`tos-sync`** | *(atualiza os `.md`)* | Atualiza a especificação **antes** do código quando um requisito muda no meio do caminho (evita *spec drift*). |
 
 ---
 
@@ -139,6 +157,7 @@ seu-projeto/
 └── .tech-os/
     ├── 00-manifesto.md         # Lei do projeto (stack, segurança, DoD)
     ├── _dominio.md             # Glossário de negócio
+    ├── _design.md              # Padrões visuais e de UI (opcional)
     └── 001-minha-feature/
         ├── 01-discovery.md     # Entendimento e decisões
         ├── 02-blueprint.md     # PRD de engenharia e impacto
