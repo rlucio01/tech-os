@@ -1,6 +1,6 @@
 {
   "name": "tech-os",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Spec-Driven Development, Context Engineering & Autonomous Loop framework for AI-assisted coding.",
   "type": "module",
   "bin": {
