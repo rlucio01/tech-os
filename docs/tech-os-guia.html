@@ -270,7 +270,7 @@
     </div>
     <div class="footer">
       <span>Tech OS · v0.2.0 · github.com/rlucio01/tech-os</span>
-      <span>Página 1 / 8</span>
+      <span>Página 1 / 10</span>
     </div>
   </section>
 
@@ -303,7 +303,7 @@
 
     <div class="footer">
       <span>Tech OS · Fundamentos</span>
-      <span>Página 2 / 8</span>
+      <span>Página 2 / 10</span>
     </div>
   </section>
 
@@ -336,7 +336,7 @@
 
     <div class="footer">
       <span>Tech OS · Princípios</span>
-      <span>Página 3 / 8</span>
+      <span>Página 3 / 10</span>
     </div>
   </section>
 
@@ -406,7 +406,7 @@
 
     <div class="footer">
       <span>Tech OS · Fluxo das Skills</span>
-      <span>Página 4 / 8</span>
+      <span>Página 4 / 10</span>
     </div>
   </section>
 
@@ -449,7 +449,7 @@
 
     <div class="footer">
       <span>Tech OS · Manifesto &amp; Discovery</span>
-      <span>Página 5 / 8</span>
+      <span>Página 5 / 10</span>
     </div>
   </section>
 
@@ -487,7 +487,7 @@
 
     <div class="footer">
       <span>Tech OS · Blueprint &amp; Contratos</span>
-      <span>Página 6 / 8</span>
+      <span>Página 6 / 10</span>
     </div>
   </section>
 
@@ -528,7 +528,7 @@
 
     <div class="footer">
       <span>Tech OS · Execução Autônoma</span>
-      <span>Página 7 / 8</span>
+      <span>Página 7 / 10</span>
     </div>
   </section>
 
@@ -587,7 +587,100 @@ tech-os run 001-minha-feature --dry-run</pre>
 
     <div class="footer">
       <span>Tech OS · github.com/rlucio01/tech-os · npmjs.com/package/tech-os</span>
-      <span>Página 8 / 8</span>
+      <span>Página 8 / 10</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: EXEMPLO PRÁTICO PARTE 1 -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow emerald">Na Prática · Passo a Passo</span>
+      <h2>Exemplo Real: Criando um App de <span class="accent-emerald">Controle de Gastos</span></h2>
+      <p class="subtitle">Veja como qualquer pessoa (mesmo sem ser especialista em código) cria um projeto do zero usando o Tech OS.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card highlight-cyan">
+        <h3>Passo 1 · Preparar a pasta</h3>
+        <p style="margin-bottom: 8px;">No terminal, crie a pasta do seu app e ligue o Tech OS:</p>
+        <pre style="font-size: 11.5px; padding: 10px;">mkdir meu-controle-gastos
+cd meu-controle-gastos
+npx tech-os init</pre>
+        <p style="margin-top: 8px; font-size: 12px; color: var(--muted);">Escolha seu editor (ex: Antigravity) e o perfil <strong>MVP Rápido</strong>.</p>
+      </div>
+
+      <div class="card highlight-amber">
+        <h3>Passo 2 · Alinhar a ideia</h3>
+        <p style="margin-bottom: 8px;">No chat da IA, peça para ela investigar antes de codar:</p>
+        <pre style="font-size: 11.5px; padding: 10px;">"Use a skill tos-discovery:
+quero um app simples para
+anotar meus gastos do mês."</pre>
+        <p style="margin-top: 8px; font-size: 12px; color: var(--muted);">A IA faz perguntas simples (ex: <em>"Precisa de login?"</em>) e salva em <code>01-discovery.md</code>.</p>
+      </div>
+
+      <div class="card highlight-emerald">
+        <h3>Passo 3 · Montar o plano</h3>
+        <p style="margin-bottom: 8px;">Peça para a IA transformar o combinado em tarefas:</p>
+        <pre style="font-size: 11.5px; padding: 10px;">"Agora rode tos-blueprint
+e depois tos-planejar."</pre>
+        <p style="margin-top: 8px; font-size: 12px; color: var(--muted);">Ela cria uma lista numerada (<code>F01</code>, <code>F02</code>...) em <code>04-plano.md</code>.</p>
+      </div>
+    </div>
+
+    <div class="quote-box">
+      Resultado até aqui: você ainda não escreveu 1 linha de código, mas já sabe exatamente o que vai ser construído — e a IA também!
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Exemplo Prático (1/2)</span>
+      <span>Página 9 / 10</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: EXEMPLO PRÁTICO PARTE 2 -->
+  <section class="slide">
+    <div>
+      <span class="eyebrow emerald">Na Prática · Execução e Segurança</span>
+      <h2>Executando o Plano e <span class="accent-cyan">Verificando Tudo</span></h2>
+      <p class="subtitle">Agora o Tech OS executa uma tarefa por vez com contexto limpo, testa e garante que nada quebrou.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card highlight-cyan">
+        <h3>Passo 4 · Acompanhar e Executar</h3>
+        <pre style="font-size: 11.5px; padding: 10px; margin-bottom: 10px;"># 1. Veja o que falta fazer:
+tech-os status
+
+# 2. Deixe a IA executar tarefa por tarefa:
+tech-os run 001-controle-gastos</pre>
+        <ul>
+          <li>Em tarefas <code>[AUTO]</code>, a IA programa, testa e salva no Git.</li>
+          <li>Em tarefas <code>[HUMANO]</code> (ex: aprovar visual da tela), ela pausa e pede seu "OK".</li>
+        </ul>
+      </div>
+
+      <div class="card highlight-emerald">
+        <h3>Passo 5 · Conferir Saúde e Segurança</h3>
+        <pre style="font-size: 11.5px; padding: 10px; margin-bottom: 10px;"># Checa Git, .env e segredos expostos:
+tech-os doctor
+
+# Precisou mudar uma regra no meio?
+"Rode tos-sync: agora quero
+exportar os gastos em CSV."</pre>
+        <ul>
+          <li>O <strong>Secret Guard</strong> impede que senhas ou arquivos <code>.env</code> sejam salvos por engano.</li>
+          <li>O <code>tos-sync</code> atualiza o plano antes de mexer no código.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quote-box">
+      Dica para quem não é de TI: não precisa decorar comandos — rode <code>tech-os guide</code> ou diga à IA: <em>"Leia o AGENTS.md e me guie no próximo passo"</em>.
+    </div>
+
+    <div class="footer">
+      <span>Tech OS · Exemplo Prático (2/2) · github.com/rlucio01/tech-os</span>
+      <span>Página 10 / 10</span>
     </div>
   </section>
 
