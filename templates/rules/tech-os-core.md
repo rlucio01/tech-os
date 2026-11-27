@@ -1,0 +1,28 @@
+# Tech OS — Contexto & Regras Permanentes
+
+Este projeto utiliza o **Tech OS** (Spec-Driven Development + Context Engineering).
+
+## Contexto Base do Projeto
+Sempre que iniciar uma tarefa, consulte (se existirem):
+- `.tech-os/00-manifesto.md` — regras, stack, segurança e DoD do projeto
+- `.tech-os/_dominio.md` — vocabulário e regras de negócio
+
+## Princípios Inegociáveis
+1. **IA sugere; engenheiro decide.** Nunca tome decisões arquiteturais silenciosas.
+2. **Pense antes de programar.** Declare premissas e pergunte quando houver ambiguidade.
+3. **Código mínimo que resolve o problema.** Sem overengineering ou abstrações especulativas.
+4. **Mudanças cirúrgicas.** Altere apenas o que tem relação direta com o pedido.
+5. **Regra de Ouro:** O desenvolvedor precisa conseguir explicar a mudança sem abrir o chat.
+
+## Classificação de Impacto
+Antes de implementar qualquer mudança:
+- **`local`**: não altera API/schema nem cruza fronteiras arquiteturais.
+- **`estrutural`**: altera API/eventos/schema, autenticação ou múltiplos módulos -> **peça validação humana antes de codar**.
+
+## Fluxo de Skills Disponíveis
+- `tos-manifesto` — cria `00-manifesto.md` e `_dominio.md` (1x por projeto)
+- `tos-discovery` — entrevista para mapear incógnitas (`01-discovery.md`)
+- `tos-blueprint` — PRD técnico e impacto (`02-blueprint.md`)
+- `tos-contratos` — contratos de API/dados (`03-contratos.md`, opcional)
+- `tos-planejar` — plano fatiado `[AUTO]` / `[HUMANO]` (`04-plano.md`)
+- `tos-sync` — atualiza a spec antes do código quando um requisito muda
